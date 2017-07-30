@@ -4,7 +4,7 @@
 
 # IntelliJ project files
 .idea
-.idea/workspace.xml
+.idea/workspace.xm
 *.iml
 out
 gen
