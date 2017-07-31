@@ -1,5 +1,3 @@
-//window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
-
 var renderers = {
 
     'linesContainer': (function() {
@@ -15,7 +13,7 @@ var renderers = {
             linesEl = document.getElementById('lines');
             for(var i = 0; i < count; i++ ){
                 var node = document.createElement('div');
-                node.style.width = node.style.height = (i/count*width) + 'px';
+                node.style.width = node.style.height = (i / count * width) + 'px';
                 node.classList.add('line');
                 lines.push(node);
                 linesEl.appendChild(node);
@@ -55,11 +53,9 @@ window.onload = function() {
 
     function Visualization(config) {
         var audio,
-            audioStream,
             analyser,
             source,
             audioCtx,
-            canvasCtx,
             frequencyData,
             running = false,
             renderer = config.renderer,
@@ -81,17 +77,20 @@ window.onload = function() {
                 height: height
             });
 
-            audio.crossOrigin = "anonymous";
+            audio.crossOrigin = 'anonymous';
         };
+
         this.start = function() {
             audio.play();
             running = true;
             renderFrame();
         };
+
         this.stop = function() {
             running = false;
             audio.pause();
         };
+
         this.setRenderer = function(r) {
             if (!r.isInitialized()) {
                 r.init({
@@ -102,6 +101,7 @@ window.onload = function() {
             }
             renderer = r;
         };
+
         this.isPlaying = function() {
             return running;
         };
@@ -117,32 +117,25 @@ window.onload = function() {
         init();
 
     }
-    var vis = document.querySelectorAll('.initiator');
+
+    var button = document.querySelector('.initiator');
     var v = null;
-    var lastEl;
-    var lastElparentId;
 
-    for(var i=0; i<vis.length; i++) {
-        vis[i].onclick = (function() {
+    button.onclick = (function() {
 
-            return function() {
-                var el = this;
-                var id = el.parentNode.id;
+        return function() {
+            var el = this;
+            var id = el.parentNode.id;
 
-                if (!v) {
-                    v = new Visualization({renderer: renderers[id] });
-                }
-                v.setRenderer(renderers[id]);
-                if (v.isPlaying()) {
-                    if (lastElparentId === id) {
-                        v.stop();
-                    }
-                } else {
-                    v.start();
-                }
-                lastElparentId = id;
-                lastEl = el;
-            };
-        })();
-    }
+            if (!v) {
+                v = new Visualization({renderer: renderers[id] });
+            }
+            v.setRenderer(renderers[id]);
+            if (v.isPlaying()) {
+                v.stop();
+            } else {
+                v.start();
+            }
+        };
+    })();
 };
